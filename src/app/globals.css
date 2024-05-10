@@ -3,27 +3,31 @@
 @tailwind utilities;
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+   .text-balance {
+      text-wrap: balance;
+   }
+}
+
+body {
+   scroll-behavior: smooth;
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+   width: 10px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+   background: #f1f1f1;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(191, 144, 4);
+   background: rgb(191, 144, 4);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #ae8706;
+   background: #ae8706;
 }

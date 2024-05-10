@@ -13,6 +13,7 @@ const config: Config = {
             black: "#323133",
             coffeegray: "#c3b486",
             emzalight: "#fcedc0",
+            white: "#f0f8ff",
          },
       },
    },

@@ -20,7 +20,7 @@ const Categories: React.FC<PageProps> = ({ branchID }) => {
    const [categories, setCategories] = useState<Category[]>()
 
    // ** functions
-   const getCatefories = async () => {
+   const getCategories = async () => {
       const res = await api.get(`/branch/${branchID}/categories`)
       const data: Category[] = res.data.categories
       setCategories(data)
