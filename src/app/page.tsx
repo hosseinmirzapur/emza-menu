@@ -1,5 +1,9 @@
-import Image from "next/image"
+import HomePage from "./components/layouts/HomePage"
 
 export default function Home() {
-   return <div className="text-center">Emza Cafe</div>
+   return (
+      <>
+         <HomePage />
+      </>
+   )
 }
