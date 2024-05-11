@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+   images: {
+      remotePatterns: [
+         {
+            hostname: "api.emza.cafe",
+            pathname: "/public/**/*",
+            protocol: "https",
+         },
+      ],
+   },
+}
 
-export default nextConfig;
+export default nextConfig

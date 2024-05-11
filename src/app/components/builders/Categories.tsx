@@ -1,14 +1,18 @@
 "use client"
 
 import { api } from "@/utils"
-import { useState } from "react"
-import Carousel from "react-multi-carousel"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import { Card, CardTitle } from "reactstrap"
+import Loader from "./Loader"
+
+import { motion } from "framer-motion"
 
 interface Category {
    id: number | string
-   name: string
-   icon: string
-   image: string
+   title: string
+   active_image: string
+   passive_image: string
 }
 
 interface PageProps {
@@ -18,70 +22,75 @@ interface PageProps {
 const Categories: React.FC<PageProps> = ({ branchID }) => {
    // ** variables
    const [categories, setCategories] = useState<Category[]>()
+   const [canvas, setCanvas] = useState(false)
 
    // ** functions
    const getCategories = async () => {
-      const res = await api.get(`/branch/${branchID}/categories`)
-      const data: Category[] = res.data.categories
-      setCategories(data)
+      const res = await api.get(`/get-branch-${branchID}-products`)
+
+      const uniqueObjects: Category[] = res.data.categories.filter(
+         (obj: any, index: any, arr: any) => {
+            return (
+               arr.findIndex((currObj: any) => currObj.title === obj.title) ===
+               index
+            )
+         }
+      )
+
+      setCategories(uniqueObjects)
    }
 
-   return (
-      <>
-         <Carousel
-            additionalTransfrom={0}
-            arrows
-            centerMode={false}
-            containerClass="container-with-dots"
-            dotListClass=""
-            draggable
-            focusOnSelect={false}
-            infinite
-            itemClass=""
-            keyBoardControl
-            minimumTouchDrag={80}
-            pauseOnHover
-            renderArrowsWhenDisabled={false}
-            renderButtonGroupOutside={false}
-            renderDotsOutside={false}
-            responsive={{
-               desktop: {
-                  breakpoint: {
-                     max: 3000,
-                     min: 1024,
-                  },
-                  items: 3,
-                  partialVisibilityGutter: 40,
-               },
-               mobile: {
-                  breakpoint: {
-                     max: 464,
-                     min: 0,
-                  },
-                  items: 1,
-                  partialVisibilityGutter: 30,
-               },
-               tablet: {
-                  breakpoint: {
-                     max: 1024,
-                     min: 464,
-                  },
-                  items: 2,
-                  partialVisibilityGutter: 30,
-               },
+   const openOffCanvas = () => setCanvas(!canvas)
+
+   useEffect(() => {
+      getCategories()
+   }, [])
+
+   return categories != null ? (
+      categories.length > 0 ? (
+         <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-5 my-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+               ease: "easeIn",
             }}
-            rewind={false}
-            rewindWithAnimation={false}
-            rtl={false}
-            shouldResetAutoplay
-            showDots={false}
-            sliderClass=""
-            slidesToSlide={1}
-            swipeable
          >
-            <div></div>
-         </Carousel>
-      </>
+            {categories.map((cat, index) => (
+               <Card
+                  key={index}
+                  className="
+                     flex
+                     justify-center
+                     items-center
+                     w-10/12
+                     mx-auto
+                     py-3
+                     md:cursor-pointer
+                     hover:shadow-lg
+                     transition-all
+                     bg-yellow-100
+                     min-h-[150px]
+                  "
+                  onClick={openOffCanvas}
+               >
+                  <CardTitle className="flex gap-3 justify-center items-center font-bold">
+                     <Image
+                        src={cat.passive_image || cat.active_image}
+                        alt={`icon-${cat.title}`}
+                        width={50}
+                        height={50}
+                     />
+                     {cat.title}
+                  </CardTitle>
+               </Card>
+            ))}
+         </motion.div>
+      ) : (
+         <div>هنوز دسته بندی ثبت شده ای در این شعبه موجود نیست</div>
+      )
+   ) : (
+      <Loader />
    )
 }
 
