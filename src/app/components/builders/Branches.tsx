@@ -55,13 +55,18 @@ const Branches = () => {
             }}
          >
             {branches.map((branch, index) => (
-               <Card key={index} className="hover:shadow-xl transition-all">
+               <Card
+                  key={index}
+                  className="hover:shadow-xl transition-all bg-emzalight"
+               >
                   <CardHeader className="flex gap-3 bg-yellow-500 font-bold align-middle">
                      <SiCoffeescript fontSize={24} className="text-[#9c614b]" />
                      {branch.name}
                   </CardHeader>
-                  <CardBody className="h-[200px] md:h-[250px] overflow-auto">
-                     {branch.address || "برای مشاهده منوی این شعبه کلیک کنید"}
+                  <CardBody className="flex items-center min-h-[150px] overflow-auto">
+                     {branch.address
+                        ? `آدرس: ${branch.address}`
+                        : "برای مشاهده منوی این شعبه کلیک کنید"}
                   </CardBody>
                   <CardFooter className="flex justify-center">
                      <Link href={`/branch/${branch.id}`}>

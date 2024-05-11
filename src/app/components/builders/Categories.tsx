@@ -7,6 +7,7 @@ import { Card, CardTitle } from "reactstrap"
 import Loader from "./Loader"
 
 import { motion } from "framer-motion"
+import ProductOffCanvas from "./OffCanvas"
 
 interface Category {
    id: number | string
@@ -21,26 +22,17 @@ interface PageProps {
 
 const Categories: React.FC<PageProps> = ({ branchID }) => {
    // ** variables
-   const [categories, setCategories] = useState<Category[]>()
+   const [categories, setCategories] = useState<Category[] | any[]>()
+   const [selectedProducts, setSelectedProducts] = useState<any[]>([])
    const [canvas, setCanvas] = useState(false)
 
    // ** functions
    const getCategories = async () => {
       const res = await api.get(`/get-branch-${branchID}-products`)
-
-      const uniqueObjects: Category[] = res.data.categories.filter(
-         (obj: any, index: any, arr: any) => {
-            return (
-               arr.findIndex((currObj: any) => currObj.title === obj.title) ===
-               index
-            )
-         }
-      )
-
-      setCategories(uniqueObjects)
+      setCategories(res.data.categories)
    }
 
-   const openOffCanvas = () => setCanvas(!canvas)
+   const toggleOffCanvas = () => setCanvas(!canvas)
 
    useEffect(() => {
       getCategories()
@@ -72,7 +64,10 @@ const Categories: React.FC<PageProps> = ({ branchID }) => {
                      bg-yellow-100
                      min-h-[150px]
                   "
-                  onClick={openOffCanvas}
+                  onClick={() => {
+                     toggleOffCanvas()
+                     setSelectedProducts(cat.products)
+                  }}
                >
                   <CardTitle className="flex gap-3 justify-center items-center font-bold">
                      <Image
@@ -85,6 +80,12 @@ const Categories: React.FC<PageProps> = ({ branchID }) => {
                   </CardTitle>
                </Card>
             ))}
+
+            <ProductOffCanvas
+               open={canvas}
+               closeFunc={toggleOffCanvas}
+               products={selectedProducts}
+            />
          </motion.div>
       ) : (
          <div>هنوز دسته بندی ثبت شده ای در این شعبه موجود نیست</div>

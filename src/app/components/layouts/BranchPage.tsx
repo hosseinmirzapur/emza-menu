@@ -12,7 +12,8 @@ const BranchPage: React.FC<BranchProps> = ({ branchID }) => {
    return (
       <div>
          <Header />
-         <div className="text-center">
+         <p className="text-center text-xl font-bold pt-4">دسته بندی محصولات</p>
+         <div>
             <Categories branchID={branchID} />
          </div>
       </div>
